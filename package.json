@@ -1,0 +1,23 @@
+{
+  "name": "chat-app",
+  "version": "1.0.0",
+  "description": "Una aplicación de chat en tiempo real utilizando Socket.IO en Node.js.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node --watch server.js"
+  },
+  "keywords": [
+    "chat",
+    "socket.io",
+    "node.js",
+    "realtime"
+  ],
+  "author": "Grupo 1",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "morgan": "^1.10.0",
+    "socket.io": "^4.7.5"
+  }
+}

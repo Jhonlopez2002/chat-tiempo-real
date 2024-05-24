@@ -1,0 +1,69 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat en Tiempo Real</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Div para la interfaz de usuario del chat -->
+    <div id="chatContainer" style="display: none;">
+        <div id="messages"></div>
+        <input type="text" id="messageInput" placeholder="Escribe un mensaje">
+        <button id="sendButton">Enviar</button>
+    </div>
+
+    <!-- Div para el formulario de nombre de usuario -->
+    <div id="usernameForm">
+        <input type="text" id="usernameInput" placeholder="Ingrese su nombre de usuario">
+        <button id="joinButton">Unirse al Chat</button>
+    </div>
+
+    <!-- Script para la lógica del cliente -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        // Obtener elementos del DOM
+        const chatContainer = document.getElementById('chatContainer');
+        const usernameForm = document.getElementById('usernameForm');
+        const usernameInput = document.getElementById('usernameInput');
+        const joinButton = document.getElementById('joinButton');
+        const messagesContainer = document.getElementById('messages');
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+
+        // Ocultar el contenedor de chat al cargar la página
+        chatContainer.style.display = 'none';
+
+        // Evento para unirse al chat
+        joinButton.addEventListener('click', () => {
+            const username = usernameInput.value.trim();
+            if (username !== '') {
+                socket.emit('join', username);
+                usernameForm.style.display = 'none';
+                chatContainer.style.display = 'block';
+            }
+        });
+
+        // Evento para enviar un mensaje
+        sendButton.addEventListener('click', () => {
+            const message = messageInput.value.trim();
+            if (message !== '') {
+                socket.emit('chatMessage', message);
+                messageInput.value = '';
+            }
+        });
+
+        // Manejar mensajes de chat entrantes
+        socket.on('chatMessage', (data) => {
+            const { username, message } = data;
+            const messageElement = document.createElement('div');
+            messageElement.textContent = `${username}: ${message}`;
+            messagesContainer.appendChild(messageElement);
+        });
+    </script>
+</body>
+</html>
